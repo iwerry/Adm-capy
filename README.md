@@ -70,7 +70,7 @@ Passos genéricos (Render):
 5. Variáveis de ambiente:
    - `DATABASE_URL=file:./data/dev.db`
    - (ajuste conforme o ambiente; para produção persistente, considere um SQLite gerenciado ou outro banco)
-6. Após o deploy, anote a URL pública do serviço (ex.: `https://capynews-api.onrender.com`). A base da API será `https://capynews-api.onrender.com/api`.
+6. Após o deploy, anote a URL pública gerada pelo PaaS.
 7. Defina `<PUBLIC_API_BASE_URL>` como a base real da API que você obteve, por exemplo: `https://SEU-API-HOST/api`.
 
 Equivalentes em Railway/DO App Platform:

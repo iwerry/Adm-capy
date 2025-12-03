@@ -2,6 +2,8 @@
 .DS_Store
 Thumbs.db
 *.log
+.env
+data/*.db
 
 # server
 server/node_modules/

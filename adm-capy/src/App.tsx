@@ -8,6 +8,7 @@ import ArticleEdit from "./pages/ArticleEdit"
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin/articles" element={<RequireAuth><ArticlesList /></RequireAuth>} />
       <Route path="/admin/articles/new" element={<RequireAuth><ArticleNew /></RequireAuth>} />
