@@ -51,8 +51,10 @@ npm run dev
   - Senha: `CapyNews2025!`
 - Proteção de rotas com `localStorage.admToken`.
 
-## Deploy da API (ex.: Render)
-Objetivo: obter uma URL pública estável, ex.: `https://capynews-api.onrender.com/api`.
+## Deploy da API (Render/Railway/DO)
+Objetivo: obter uma URL pública estável, representada como `<PUBLIC_API_BASE_URL>` (ex.: `https://SEU-API-HOST/api`).
+
+Importante: a API não será hospedada na Vercel.
 
 Passos genéricos (Render):
 1. Criar um novo Web Service apontando para este repositório.
@@ -68,7 +70,8 @@ Passos genéricos (Render):
 5. Variáveis de ambiente:
    - `DATABASE_URL=file:./data/dev.db`
    - (ajuste conforme o ambiente; para produção persistente, considere um SQLite gerenciado ou outro banco)
-6. Após o deploy, anote a URL pública do serviço, por ex.: `https://capynews-api.onrender.com`. A base da API será `https://capynews-api.onrender.com/api`.
+6. Após o deploy, anote a URL pública do serviço (ex.: `https://capynews-api.onrender.com`). A base da API será `https://capynews-api.onrender.com/api`.
+7. Defina `<PUBLIC_API_BASE_URL>` como a base real da API que você obteve, por exemplo: `https://SEU-API-HOST/api`.
 
 Equivalentes em Railway/DO App Platform:
 - Configure o serviço com Root `server`, build e start como acima, e defina `DATABASE_URL` no painel.
@@ -82,7 +85,13 @@ Configuração:
 - Build Command: `npm run build`
 - Output Directory: `dist`
 - Variáveis de ambiente (produção):
-  - `VITE_API_URL` = URL pública da API, ex.: `https://capynews-api.onrender.com/api`
+  - `VITE_API_URL` = `<PUBLIC_API_BASE_URL>` (ex.: `https://SEU-API-HOST/api`)
+
+## Uso de `<PUBLIC_API_BASE_URL>`
+- `<PUBLIC_API_BASE_URL>` será definido após o deploy do `/server` em um PaaS (Render/Railway/DO).
+- Essa URL deve ser usada:
+  - como `VITE_API_URL` do admin (`/adm-capy`).
+  - como `VITE_API_URL` do frontend público (repo separado CapyNews).
 
 ## Meta
 - Local: `cd server && npm run dev` sobe a API; `cd adm-capy && npm run dev` abre o admin consumindo `VITE_API_URL`.
