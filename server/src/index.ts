@@ -1,5 +1,5 @@
-import express from "express"
-import cors from "cors"
+import express, { Request, Response } from "express"
+import cors, { CorsOptions } from "cors"
 import dotenv from "dotenv"
 import { PrismaClient } from "@prisma/client"
 
@@ -8,10 +8,24 @@ dotenv.config()
 const prisma = new PrismaClient()
 const app = express()
 
-app.use(cors())
+const allowedOrigins = [
+  "https://capynews2025.vercel.app",
+  "https://adm-capy.vercel.app",
+  "http://localhost:5173"
+]
+
+const corsOptions: CorsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true)
+    if (allowedOrigins.includes(origin)) return callback(null, true)
+    return callback(new Error("Not allowed by CORS"))
+  }
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
-app.get("/api/categories", async (req, res) => {
+app.get("/api/categories", async (req: Request, res: Response) => {
   try {
     const categories = await prisma.category.findMany({ orderBy: { name: "asc" } })
     res.json(categories)
@@ -20,7 +34,7 @@ app.get("/api/categories", async (req, res) => {
   }
 })
 
-app.get("/api/articles", async (req, res) => {
+app.get("/api/articles", async (req: Request, res: Response) => {
   try {
     const category = typeof req.query.category === "string" ? req.query.category : undefined
     if (category) {
@@ -41,7 +55,7 @@ app.get("/api/articles", async (req, res) => {
   }
 })
 
-app.get("/api/articles/:id", async (req, res) => {
+app.get("/api/articles/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
     if (Number.isNaN(id)) {
@@ -57,7 +71,7 @@ app.get("/api/articles/:id", async (req, res) => {
   }
 })
 
-app.get("/api/articles/slug/:slug", async (req, res) => {
+app.get("/api/articles/slug/:slug", async (req: Request, res: Response) => {
   try {
     const slug = req.params.slug
     const article = await prisma.article.findUnique({ where: { slug } })
@@ -70,7 +84,7 @@ app.get("/api/articles/slug/:slug", async (req, res) => {
   }
 })
 
-app.post("/api/articles", async (req, res) => {
+app.post("/api/articles", async (req: Request, res: Response) => {
   try {
     const { title, slug, content, excerpt, categoryId } = req.body || {}
     if (!title || !slug || !content || !categoryId) {
@@ -85,7 +99,7 @@ app.post("/api/articles", async (req, res) => {
   }
 })
 
-app.put("/api/articles/:id", async (req, res) => {
+app.put("/api/articles/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
     if (Number.isNaN(id)) {
@@ -102,7 +116,7 @@ app.put("/api/articles/:id", async (req, res) => {
   }
 })
 
-app.delete("/api/articles/:id", async (req, res) => {
+app.delete("/api/articles/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id)
     if (Number.isNaN(id)) {
@@ -115,5 +129,7 @@ app.delete("/api/articles/:id", async (req, res) => {
   }
 })
 
-const port = Number(process.env.PORT || 4000)
-app.listen(port, () => {})
+const PORT = Number(process.env.PORT || 4000)
+app.listen(PORT, () => {
+  console.log(`API running on port ${PORT}`)
+})

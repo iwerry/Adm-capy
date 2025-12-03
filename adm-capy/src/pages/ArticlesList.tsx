@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { getArticles, deleteArticle, getCategories } from "../lib/api"
+import { apiGet, apiDelete } from "../services/apiClient"
 
 type Article = {
   id: number
@@ -23,17 +23,18 @@ export default function ArticlesList() {
   const [categories, setCategories] = useState<Category[]>([])
   const [category, setCategory] = useState<string>("")
   async function load() {
-    const data = await getArticles(category || undefined)
+    const path = category ? `/articles?category=${encodeURIComponent(category)}` : "/articles"
+    const data = await apiGet<Article[]>(path)
     setItems(data)
   }
   useEffect(() => {
     load()
   }, [category])
   useEffect(() => {
-    getCategories().then(setCategories)
+    apiGet<Category[]>("/categories").then(setCategories)
   }, [])
   async function remove(id: number) {
-    await deleteArticle(id)
+    await apiDelete(`/articles/${id}`)
     load()
   }
   return (

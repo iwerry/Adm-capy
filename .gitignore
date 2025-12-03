@@ -1,0 +1,15 @@
+# root
+.DS_Store
+Thumbs.db
+*.log
+
+# server
+server/node_modules/
+server/dist/
+server/.env
+server/data/*.db
+
+# admin
+adm-capy/node_modules/
+adm-capy/dist/
+adm-capy/.env*

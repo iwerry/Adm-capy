@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { createArticle, getCategories } from "../lib/api"
+import { apiGet, apiPost } from "../services/apiClient"
 
 type Category = {
   id: number
@@ -17,12 +17,12 @@ export default function ArticleNew() {
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
-    getCategories().then(setCategories)
+    apiGet<Category[]>("/categories").then(setCategories)
   }, [])
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!categoryId) return
-    await createArticle({ title, slug, content, excerpt, categoryId })
+    await apiPost("/articles", { title, slug, content, excerpt, categoryId })
     nav("/admin/articles", { replace: true })
   }
   return (

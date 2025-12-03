@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { getArticleById, updateArticle, getCategories } from "../lib/api"
+import { apiGet, apiPut } from "../services/apiClient"
 
 type Category = {
   id: number
@@ -19,10 +19,10 @@ export default function ArticleEdit() {
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
-    getCategories().then(setCategories)
+    apiGet<Category[]>("/categories").then(setCategories)
   }, [])
   useEffect(() => {
-    getArticleById(id).then(a => {
+    apiGet<any>(`/articles/${id}`).then(a => {
       if (!a) return
       setTitle(a.title)
       setSlug(a.slug)
@@ -34,7 +34,7 @@ export default function ArticleEdit() {
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!categoryId) return
-    await updateArticle(id, { title, slug, content, excerpt, categoryId })
+    await apiPut(`/articles/${id}`, { title, slug, content, excerpt, categoryId })
     nav("/admin/articles", { replace: true })
   }
   return (
